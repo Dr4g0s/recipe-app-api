@@ -5,6 +5,10 @@ python:
 services:
   - docker
 
+before_insta:
+  - docker-compose up -d
+  - docker ps
+
 before_script: pip install docker-compose
 
 script:
