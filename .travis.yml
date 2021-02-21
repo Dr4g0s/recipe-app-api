@@ -6,7 +6,7 @@ services:
   - docker
 
 before_insta:
-  - docker-compose up
+  - docker-compose up -d
   - docker ps
 
 before_script: pip install docker-compose
