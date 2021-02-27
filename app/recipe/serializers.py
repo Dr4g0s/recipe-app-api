@@ -27,14 +27,30 @@ class RecipeSerializer(serializers.ModelSerializer):
         many=True,
         queryset=Tag.objects.all()
     )
+    image = serializers.SerializerMethodField()
 
     class Meta:
         model = Recipe
         fields = (
             'id', 'title', 'tags', 'ingredients', 'time_minutes', 'price',
-            'link'
+            'link', 'image'
         )
-        read_only_field = ('id',)
+        read_only_field = ('id')
+
+    def get_image(self, obj):
+        request = self.context.get('request')
+        if obj.image and hasattr(obj.image, 'url'):
+            image_url = obj.image.url
+            return request.build_absolute_uri(image_url)
+        return None
+
+
+class RecipeImageSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Recipe
+        fields = ('id', 'image')
+        read_only_fields = ('id',)
 
 
 class RecipeDetailSerializer(RecipeSerializer):
